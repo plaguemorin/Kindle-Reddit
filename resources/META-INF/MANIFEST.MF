@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Main-Class: ca.screenshot.kindle.readit.Main
+Implementation-Title: Readit
+Implementation-Version: 1.0
+Implementation-Vendor: Philippe
+Extension-List: SDK
+SDK-Extension-Name: com.amazon.kindle.kindlet
+SDK-Specification-Version: 1.2
+Toolbar-Mode: transistent
+Font-Size-Mode: point

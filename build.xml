@@ -1,0 +1,79 @@
+<project name="KindleReaddit" basedir=".">
+
+	<property name="keystore.file" value="developer.keystore" />
+	<property name="keystore.password" value="password" />
+	<property name="keystore.dkName" value="dktest" />
+	<property name="keystore.diName" value="ditest" />
+	<property name="keystore.dnName" value="dntest" />
+
+	<property name="build.output.path" value="${basedir}/out/production/KindleReddit" />
+	<property name="artifact.output.path" value="${basedir}/out/artifacts/Kindle_Jar" />
+	<property name="artifact.output.fileName" value="Readit.jar" />
+
+	<property name="finalName" value="${artifact.output.path}/${artifact.output.fileName}" />
+	<property name="kindle.fileName" value="Readdit.azw2" />
+
+	<target name="prepare">
+
+	</target>
+
+	<target name="clean">
+		<delete dir="${basedir}/out/production/KindleReddit" />
+	</target>
+
+	<target name="build" depends="prepare">
+		<mkdir dir="${build.output.path}" />
+		<javac srcdir="src"
+			   destdir="${build.output.path}"
+			   debug="true"
+			   debuglevel="lines"
+			   source="1.4"
+			   target="1.4">
+			<classpath>
+				<fileset dir="${basedir}/../../kindle">
+					<patternset>
+						<include name="**.jar" />
+					</patternset>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="package" depends="build">
+		<mkdir dir="${artifact.output.path}" />
+		<jar destfile="${artifact.output.path}/${artifact.output.fileName}" basedir="${build.output.path}"
+			 manifest="resources/META-INF/MANIFEST.MF" />
+	</target>
+
+	<target name="makekeystore" depends="prepare">
+		<!--
+		rm -f developer.keystore
+		keytool -genkeypair -keystore developer.keystore -storepass password -keypass password -alias dkTest -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown" -validity 5300
+		keytool -genkeypair -keystore developer.keystore -storepass password -keypass password -alias diTest -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown" -validity 5300
+		keytool -genkeypair -keystore developer.keystore -storepass password -keypass password -alias dnTest -dname "CN=Unknown, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown" -validity 5300
+				-->
+	</target>
+
+	<target name="signjar" depends="prepare">
+		<signjar jar="${finalName}" alias="${keystore.dkName}" keystore="${keystore.file}"
+				 storepass="${keystore.password}" />
+		<signjar jar="${finalName}" alias="${keystore.diName}" keystore="${keystore.file}"
+				 storepass="${keystore.password}" />
+		<signjar jar="${finalName}" alias="${keystore.dnName}" keystore="${keystore.file}"
+				 storepass="${keystore.password}" />
+
+		<!--
+		KEYSTORE=$1
+		JAR=$2
+
+		jarsigner -keystore $KEYSTORE -storepass password $JAR dktest
+		jarsigner -keystore $KEYSTORE -storepass password $JAR ditest
+		jarsigner -keystore $KEYSTORE -storepass password $JAR dntest
+		-->
+	</target>
+
+	<target name="dist" depends="signjar">
+		<copy file="${finalName}" tofile="${kindle.fileName}" />
+		<echo message="Ok" />
+	</target>
+</project>
