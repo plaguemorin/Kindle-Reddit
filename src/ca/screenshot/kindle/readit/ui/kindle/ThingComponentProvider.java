@@ -1,6 +1,7 @@
 package ca.screenshot.kindle.readit.ui.kindle;
 
 import ca.screenshot.kindle.readit.reddit.thing.Link;
+import ca.screenshot.kindle.readit.ui.kindle.thingcomponent.ThingLinkElement;
 import com.amazon.kindle.kindlet.ui.pages.ComponentProvider;
 import org.apache.log4j.Logger;
 
